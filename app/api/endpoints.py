@@ -1,6 +1,6 @@
 # Default route
 async def root():
-    return {"message": "Welcome to the VeriTrust Backend"}
+    return {"message": "Welcome to the VeriTrust Backend API!"}
 
 # Health check route
 async def health_check():
