@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 # Routes are declared in this Directory
 from app.api.routes import app_router
+from dotenv import load_dotenv
 
 # Check if running in dev container or Vercel only
 if not (os.getenv('IS_DEVCONTAINER') or os.getenv('VERCEL')):
@@ -25,3 +26,5 @@ app.add_middleware(
 
 # Include the router
 app.include_router(app_router)
+
+load_dotenv()  # This loads the environment variables from .env
