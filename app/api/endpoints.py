@@ -157,4 +157,50 @@ async def manual_check(manual_data: ManualInput):
         return {"extracted-text": result}
     except Exception as e:  
         return {"extracted-text": f"Error: {str(e)}"}
-    
+
+
+# Check Raw 
+# This is used to directly generate the response based on just the string
+# Works exactly like the manual 
+async def check_raw(raw_text: str):
+    try:
+        from groq import Groq
+        
+        # Initialize Groq client
+        client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+        
+        # Load the prompt template (using the same as manual check)
+        prompt = load_prompt_Manual()
+        
+        # Set up messages with the raw text
+        messages = [
+            {
+                'role': 'user',
+                'content': [
+                    {
+                        'type': 'text',
+                        'text': prompt
+                    },
+                    {
+                        'type': 'text',
+                        'text': raw_text
+                    }
+                ]
+            }
+        ]
+        
+        completion = client.chat.completions.create(
+            model='llama-3.2-90b-vision-preview',
+            messages=messages,
+            temperature=0,
+            max_completion_tokens=1024,
+            top_p=1,
+            stream=False,
+            stop=None
+        )
+        
+        result = completion.choices[0].message.content
+        return {"extracted-text": result}
+        
+    except Exception as e:
+        return {"extracted-text": f"Error: {str(e)}"}
