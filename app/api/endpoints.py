@@ -9,6 +9,11 @@ class ManualInput(BaseModel):
     claims: str 
     ingredients: str 
 
+# Suggestion model
+class SuggestionInput(BaseModel):   
+    ingredients: str
+
+
 # URL request model
 class URLRequest(BaseModel):
     url: str
@@ -204,3 +209,67 @@ async def check_raw(raw_text: str):
         
     except Exception as e:
         return {"extracted-text": f"Error: {str(e)}"}
+
+
+
+# Suggestion route logic starts from here 
+    
+def load_prompt_suggestion():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    template_path = os.path.join(current_dir, 'template', 'suggestion-prompt.txt')
+    with open(template_path, 'r') as file:
+        return file.read()
+
+def suggestion_from_llm(data:dict) ->object:
+    try :
+        from groq import Groq 
+        #  initialize Groq client
+
+        client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+        # prompt for better result 
+        prompt = load_prompt_suggestion()
+
+        messages= [
+            {
+                'role':'user',
+                'content': [
+                    {
+                        'type' : 'text' ,
+                        'text' :prompt
+                    },
+                    {
+                        'type':'text',
+                        'text' : data['ingredients']
+                    }
+                ]
+            }
+        ]
+
+        completion =  client.chat.completions.create(
+            model= 'llama-3.3-70b-versatile',
+            messages=messages,
+            temperature=1,
+            max_completion_tokens=1024,
+            top_p=1 ,
+            stream=False,
+            response_format={'type':"json_object"},
+            stop = None
+        )
+
+        result  = completion.choices[0].message.content
+        return result
+
+    except Exception as e :
+        return f"Error : {str(e)}"
+
+
+# suggestion route
+async def suggestions(manual_data: SuggestionInput):
+    try :
+        data = {
+            'ingredients' : manual_data.ingredients
+        }
+        result = suggestion_from_llm(data)
+        return {"response": result}
+    except Exception as e:  
+        return {"response": f"Error: {str(e)}"}
