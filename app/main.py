@@ -8,10 +8,10 @@ from app.api.routes import app_router
 from dotenv import load_dotenv
 
 # Check if running in dev container or Vercel only
-if not (os.getenv('IS_DEVCONTAINER') or os.getenv('VERCEL')):
-    print("\nThis application can only run inside a dev container or on Vercel\n")
-    # Forcefully exit the app
-    sys.exit(1)
+# if not (os.getenv('IS_DEVCONTAINER') or os.getenv('VERCEL')):
+#     print("\nThis application can only run inside a dev container or on Vercel\n")
+#     # Forcefully exit the app
+#     sys.exit(1)
 
 app = FastAPI(title="VeriTrust Backend")
 
@@ -26,5 +26,6 @@ app.add_middleware(
 
 # Include the router
 app.include_router(app_router)
+
 
 load_dotenv()  # This loads the environment variables from .env
