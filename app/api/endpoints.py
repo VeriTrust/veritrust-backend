@@ -86,7 +86,7 @@ async def check_image(file: UploadFile = File(...)):
         ]
         
         completion = client.chat.completions.create(
-            model="llama-3.2-90b-vision-preview",
+            model="meta-llama/llama-4-scout-17b-16e-instruct",
             messages=messages,
             temperature=0, # 0 creativity
             max_completion_tokens=1024,
@@ -152,7 +152,7 @@ def send_to_llm(data:dict) ->str:
         ]
 
         completion =  client.chat.completions.create(
-            model= 'openai/gpt-oss-120b',
+            model= 'meta-llama/llama-4-scout-17b-16e-instruct',
             messages=messages,
             temperature=0,
             max_completion_tokens=1024,
@@ -216,7 +216,7 @@ async def check_raw(raw_text: str):
         ]
         
         completion = client.chat.completions.create(
-            model='openai/gpt-oss-120b',
+            model='meta-llama/llama-4-scout-17b-16e-instruct',
             messages=messages,
             temperature=0,
             max_completion_tokens=1024,
@@ -271,7 +271,7 @@ def suggestion_from_llm(data:dict) ->object:
         ]
 
         completion =  client.chat.completions.create(
-            model= 'openai/gpt-oss-120b',
+            model= 'meta-llama/llama-4-scout-17b-16e-instruct',
             messages=messages,
             temperature=1,
             max_completion_tokens=1024,
@@ -348,7 +348,7 @@ async def check_health(health_data: HealthCheckInput):
         
         # Call the AI model
         completion = client.chat.completions.create(
-            model='lopenai/gpt-oss-120b',
+            model='meta-llama/llama-4-scout-17b-16e-instruct',
             messages=messages,
             temperature=0.2,
             max_completion_tokens=1024,
@@ -396,7 +396,7 @@ async def ask_question(request: Ask):
         from groq import Groq
         client = Groq(api_key=os.getenv("GROQ_API_KEY"))
         completion = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
+            model="meta-llama/llama-4-scout-17b-16e-instruct",
             messages=[
                 {"role": "user", "content": "Based on the Previous Conversations held by the users, understand the chat context and generate the result, the previous conversation is an optional field. Please format your response as JSON." },
                 {"role": "user", "content": f"Question: {request.question}"},
