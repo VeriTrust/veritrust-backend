@@ -152,7 +152,7 @@ def send_to_llm(data:dict) ->str:
         ]
 
         completion =  client.chat.completions.create(
-            model= 'meta-llama/llama-4-scout-17b-16e-instruct',
+            model= 'moonshotai/kimi-k2-instruct-0905',
             messages=messages,
             temperature=0,
             max_completion_tokens=1024,
@@ -216,7 +216,7 @@ async def check_raw(raw_text: str):
         ]
         
         completion = client.chat.completions.create(
-            model='meta-llama/llama-4-scout-17b-16e-instruct',
+            model='moonshotai/kimi-k2-instruct-0905',
             messages=messages,
             temperature=0,
             max_completion_tokens=1024,
