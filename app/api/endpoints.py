@@ -175,9 +175,14 @@ async def manual_check(manual_data: ManualInput):
             'ingredients' : manual_data.ingredients
         }
         result = send_to_llm(data)
-        return {"extracted-text": result}
-    except Exception as e:  
-        return {"extracted-text": f"Error: {str(e)}"}
+        # Parse the JSON response
+        parsed_result = json.loads(result)
+        # Return the parsed JSON directly
+        return parsed_result
+    except json.JSONDecodeError as e:
+        return {"error": f"Failed to parse LLM response as JSON: {str(e)}", "raw_response": result}
+    except Exception as e:
+        return {"error": f"Error: {str(e)}"}
 
 
 # Check Raw 
